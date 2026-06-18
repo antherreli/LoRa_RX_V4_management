@@ -21,7 +21,7 @@
 
 
 #define RX_TIMEOUT_VALUE                            1000
-#define BUFFER_SIZE                                 13 // Define the payload size here
+#define BUFFER_SIZE                                 14 // Define the payload size here
 
 
 #endif

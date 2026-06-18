@@ -305,7 +305,7 @@ void loop() {
 
 void OnRxDone(uint8_t* payload, uint16_t size, int16_t rssi, int8_t snr) {
   esp_task_wdt_reset();  //reset timer (feed watchdog)
-  if (payload[12] != 0xF5) return;
+  if (payload[0] != 0xF5) return;
 
 
 
@@ -329,21 +329,40 @@ void rxManagement() {
   //for (int i = 0; i < 13; i++) {
 
 
-  // printf("%02X ", rxpacket[i]);
-  uint16_t buff = ((uint16_t)(rxpacket[3] << 8) & 0xFF00) | rxpacket[4];
-  float humidity = (float)buff / 10;
+  Serial.println("Frame Rx:");
+  for(uint i = 0; i<14; i++) 
+  {
+    if (rxpacket[i] < 0x10) Serial.print("0");
+    Serial.print(rxpacket[i],HEX);
+    Serial.print(" ");
+  }
+  Serial.println();
 
-  buff = ((uint16_t)(rxpacket[5] << 8) & 0xFF00) | rxpacket[6];
+  uint16_t buff = ((uint16_t)(rxpacket[2] << 8 ) & 0xFF00) | rxpacket[3];
+  float humidity = (float)buff / 10; 
+
+  buff = ((uint16_t)(rxpacket[4] << 8 ) & 0xFF00) | rxpacket[5];
   float temperature = (float)buff / 10;
-  temperature = (buff & 0x1000) ? (6553.4 - temperature) * -1 : temperature;
+  temperature  = (buff & 0x1000) ? (6553.4 - temperature) * -1 : temperature;
+  
+  uint16_t conductivity = ((uint16_t)(rxpacket[6] << 8) & 0xFF00) | rxpacket[7];
+  Serial.println("===========Sensor 01================");
+  Serial.println("Humidity: \t" + String(humidity));
+  Serial.println("Temperature: \t" + String(temperature));
+  Serial.println("Conductivity: \t" + String(conductivity));
 
-  uint16_t conductivity = ((uint16_t)(rxpacket[7] << 8) & 0xFF00) | rxpacket[8];
-  //uint8_t count = (uint8_t)rxpacket[11];
+  //====================================================================
+  uint16_t buff_ = ((uint16_t)(rxpacket[8] << 8 ) & 0xFF00) | rxpacket[9];
+  float humidity_ = (float)buff_ / 10; 
 
-  //Serial.println("Humidity: \t" + String(humidity));
-  //Serial.println("Temperature: \t" + String(temperature));
-  //Serial.println("Conductivity: \t" + String(conductivity));
-  //Serial.println("TX Count: \t" + String(count));
+  buff_ = ((uint16_t)(rxpacket[10] << 8 ) & 0xFF00) | rxpacket[11];
+  float temperature_ = (float)buff_ / 10;
+  temperature_  = (buff_ & 0x1000) ? (6553.4 - temperature_) * -1 : temperature_;
+  uint16_t conductivity_ = ((uint16_t)(rxpacket[12] << 8) & 0xFF00) | rxpacket[13];
+  Serial.println("===========Sensor 02================");
+  Serial.println("Humidity: \t" + String(humidity_));
+  Serial.println("Temperature: \t" + String(temperature_));
+  Serial.println("Conductivity: \t" + String(conductivity_));
 
   ThingSpeak.setField(1, humidity);
   ThingSpeak.setField(2, temperature);
@@ -364,7 +383,7 @@ void rxManagement() {
   //Serial.print("Saving data: ");
   //Serial.println(dataMessage);
 
-  switch (rxpacket[11]) {
+  switch (rxpacket[1]) {
 
     case ADDR_00:
 
