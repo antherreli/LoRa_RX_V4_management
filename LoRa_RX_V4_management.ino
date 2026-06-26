@@ -77,11 +77,11 @@ esp_task_wdt_config_t config = {
 };
 
 //==========================Configurações de WiFi========================//
-//const char* ssid = "LAB";
+//const char* ssid = "GIO";
 //const char* password = "";
-//const char* password = "Lena11235813@";
+//const char* password = "fak15far47";
 const char* ssid = "TP-Link_2536";
-const char* password = "V58VNaZ7";
+const char* password = "Lena1123581321@";
 
 //WebServer server(80);
 
@@ -175,16 +175,29 @@ void setup() {
 
 
   // Conecta ao WiFi
-  WiFi.disconnect(true); 
+  /*WiFi.disconnect(true); 
   WiFi.mode(WIFI_MODE_STA);
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED && counter < 10) {
+  while (WiFi.status() != WL_CONNECTED && counter < 20) {
     delay(500);
     Serial.print(".");
     counter++;
     //esp_task_wdt_reset();  //reset timer (feed watchdog)
   }
-  counter = 0;
+  counter = 0;*/
+
+  // Conecta Wi-Fi
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect(true, true);
+  delay(1000);
+  WiFi.begin(ssid, password);
+  Serial.print("Conectando ao WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi conectado!");
+  Serial.println(WiFi.localIP());
  
   configTime(3600 * gmtOffset_sec, daylightOffset_sec, "time.nist.gov", "0.pool.ntp.org", "1.pool.ntp.org");
 
@@ -368,6 +381,9 @@ void rxManagement() {
   ThingSpeak.setField(2, temperature);
   ThingSpeak.setField(3, conductivity);
   ThingSpeak.setField(4, receivedRSSI);
+  ThingSpeak.setField(5, humidity_);
+  ThingSpeak.setField(6, temperature_);
+  ThingSpeak.setField(7, conductivity_);
 
   if (WiFi.status() == WL_CONNECTED) getLocalTime(&tmstruct);
   char timeYear[5];
