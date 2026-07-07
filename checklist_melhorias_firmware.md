@@ -8,7 +8,7 @@
 
 ### Críticos
 
-- [ ] **Controle do pino `DE` do RS485** — adicionar `pinMode(DE, OUTPUT)` e sincronizar com `RE` na troca de direção do barramento.
+- [X] **Controle do pino `DE` do RS485** — adicionar `pinMode(DE, OUTPUT)` e sincronizar com `RE` na troca de direção do barramento.
 
 ```cpp
 // No setup(), junto com a inicialização de RE:
