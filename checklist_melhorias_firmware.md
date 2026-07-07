@@ -26,7 +26,7 @@ digitalWrite(RE, LOW);
 digitalWrite(DE, LOW);    // volta para modo de recepção
 ```
 
-- [ ] **Timeout próprio no estado `WAIT`** — evita que o WDT de hardware seja alimentado indefinidamente se o rádio travar.
+- [X] **Timeout próprio no estado `WAIT`** — evita que o WDT de hardware seja alimentado indefinidamente se o rádio travar.
 
 ```cpp
 // Variáveis globais novas:
