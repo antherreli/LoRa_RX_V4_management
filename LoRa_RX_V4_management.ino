@@ -132,7 +132,7 @@ SPIClass sd_spi(HSPI);
 //==============================variaveis globais=========================//
 volatile char state = WAIT;        //variável responsável por armazenar o estado atual da máquina de estados
 char txpacket[BUFFER_SIZE];        //pacote para possível transmissão
-char rxpacket[BUFFER_SIZE];        //pacote de recepção lora
+uint8_t rxpacket[BUFFER_SIZE];        //pacote de recepção lora
 static RadioEvents_t RadioEvents;  //estrutura para callback do radio lora
 
 volatile bool lora_idle = true;  //variável auxiliar para tratamento da recepção Lora
@@ -394,7 +394,10 @@ void rxManagement() {
   String hour = (String(tmstruct.tm_hour) + ":" + String(tmstruct.tm_min) + ":" + String(tmstruct.tm_sec));
 
   String dataMessage;
-  dataMessage = String(timeDay) + "-" + month + "-" + String(timeYear) + "," + hour + "," + String(temperature) + "," + String(humidity) + "," + String(conductivity) + "," + String(receivedRSSI) + "\r\n";
+  dataMessage = String(timeDay) + "-" + month + "-" + String(timeYear) + "," + hour + "," 
+              + String(temperature) + "," + String(humidity) + "," + String(conductivity) + "," 
+              + String(temperature_) + "," + String(humidity_) + "," + String(conductivity_) + ","
+              + String(receivedRSSI) + "\r\n";
 
   //Serial.print("Saving data: ");
   //Serial.println(dataMessage);
@@ -509,7 +512,7 @@ void createFile(const char* path) {
   if (!file) {
     Serial.println("File doesn't exist");
     Serial.println("Creating file...");
-    writeFile(SD, path, "date, time, Temperature, Humidity, Condutivity,RSSI \r\n");
+    writeFile(SD, path, "date, time, Temperature, Humidity, Condutivity,Temperature_2, Humidity_2, Condutivity_2,RSSI \r\n");
   } else {
     Serial.println("File already exists");
   }
