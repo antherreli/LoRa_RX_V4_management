@@ -55,7 +55,7 @@ case WAIT:
   break;
 ```
 
-- [ ] **Zeragem dos buffers do Sensor 02** — evita retransmitir dado obsoleto em caso de falha de resposta.
+- [X] **Zeragem dos buffers do Sensor 02** — evita retransmitir dado obsoleto em caso de falha de resposta.
 
 ```cpp
 void readSensor02(void)
